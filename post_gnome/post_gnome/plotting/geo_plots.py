@@ -136,7 +136,8 @@ def contour_particles_gridded(ax,filename,t,varname,depth=0,levels=[0.1, 0.4, 0.
     #set up grid
     x_grid = np.linspace(min(x),max(x),50)
     y_grid = np.linspace(min(y),max(y),50)
-    pc_grid = np.zeros((len(y_grid),len(x_grid)),)y,varname):
+    pc_grid = np.zeros((len(y_grid),len(x_grid)),)
+    for px,py,v in zip(x,y,varname):
         ii = np.where(px>=x_grid)[0][-1]
         jj = np.where(py>=y_grid)[0][-1]
         pc_grid[jj,ii] = pc_grid[jj,ii] + 1
