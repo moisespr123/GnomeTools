@@ -1,8 +1,4 @@
-from __future__ import division
-from __future__ import unicode_literals
 from __future__ import print_function
-
-
 import cartopy.crs as ccrs
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import matplotlib.pyplot as plt
@@ -35,7 +31,6 @@ def read_bna(bna,get_bbox=True):
             y0 = mb[:,1].min()
             y1 = mb[:,1].max()
             bbox = (x0,x1,y0,y1)
-            print('bbox:', bbox)
         else:
             bbox = None
             
@@ -148,17 +143,14 @@ def contour_particles_gridded(ax,filename,t,varname,depth=0,levels=[0.1, 0.4, 0.
     x_grid = np.linspace(min(x),max(x),50)
     y_grid = np.linspace(min(y),max(y),50)
     pc_grid = np.zeros((len(y_grid),len(x_grid)),)
-    print('Num_particles:', len(x))
     for px,py,v in zip(x,y,varname):
         ii = np.where(px>=x_grid)[0][-1]
         jj = np.where(py>=y_grid)[0][-1]
         pc_grid[jj,ii] = pc_grid[jj,ii] + 1
     
     max_value = pc_grid.max()
-    print(max_value)
     levels.sort()
     particle_contours = [lev * max_value for lev in levels]
-    print(particle_contours)
 
     ax.contourf(x_grid, y_grid, pc_grid, [2,5,8,max_value],transform=ccrs.PlateCarree())
     
@@ -190,10 +182,7 @@ def contour_particles(ax,filename,t,depth=0,varname=None,criteria=None,levels=[0
     if varname is None or criteria is None:
         pid = np.where((TheData['status_codes']==2) & (TheData['depth']==depth))[0]
     else:
-        print('Applying criteria')
-        print(TheData[varname].min(),TheData[varname].max())
         pid = np.where((TheData['status_codes']==2) & (TheData['depth']==depth) & (TheData[varname]<criteria))[0]
-        print(len(pid))
 
     x = TheData['longitude'][pid]
     y = TheData['latitude'][pid]
@@ -266,7 +255,6 @@ def plot_particles(ax,filename,t,depth=0,varname=None,color='k',marker='.',marke
             var2p = TheData[varname][pid]
             bins = [0] + bins + [var2p.max()]
             for ii in range(len(bins)-2,-1,-1):
-                print(ii)
                 id = np.where((var2p>=bins[ii]) & (var2p<=bins[ii+1]))[0]
                 if len(id) >0:
                     if not hasattr(ax,'coastlines'):
